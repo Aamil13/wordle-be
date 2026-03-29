@@ -1,0 +1,28 @@
+# Dependencies (reinstalled inside Docker)
+node_modules/
+
+# Build output (rebuilt inside Docker)
+dist/
+
+# Environment variables
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+
+# Git
+.git/
+.gitignore
+
+# Dev/IDE files
+.vscode/
+.idea/
+README.md
+*.md
+
+# Docker files themselves
+Dockerfile
+.dockerignore
+docker-compose*.yml
