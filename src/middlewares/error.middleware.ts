@@ -21,6 +21,7 @@ export const errorHandler = (
   _next: NextFunction,
 ): void => {
   logger.error(err);
+
   if (err instanceof AppError) {
     const response: any = {
       status: 'error',

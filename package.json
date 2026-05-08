@@ -10,7 +10,8 @@
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write src/**/*.ts",
-    "module:create": "ts-node scripts/create-module.ts"
+    "module:create": "ts-node scripts/create-module.ts",
+    "generate-empty-module": "ts-node scripts/create-empty-module"
   },
   "author": "aamil",
   "license": "ISC",

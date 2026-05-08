@@ -1,16 +1,16 @@
 import Joi from 'joi';
 
-const userName = Joi.string().alphanum().min(3).max(20).lowercase().required().messages({
+export const userName = Joi.string().alphanum().min(3).max(20).lowercase().required().messages({
   'string.alphanum': 'Username can only contain letters and numbers',
   'string.min': 'Username must be at least 3 characters',
   'string.max': 'Username cannot exceed 20 characters',
 });
 
-const email = Joi.string().email().required().messages({
+export const email = Joi.string().email().required().messages({
   'string.email': 'Please provide a valid email address',
 });
 
-const password = Joi.string()
+export const password = Joi.string()
   .min(8)
   .max(64)
   .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)

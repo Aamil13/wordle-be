@@ -6,12 +6,12 @@ import { authLimiter } from '../../middlewares/rateLimiter.middleware';
 
 const router = Router();
 
-router.post(
-  '/register',
-  authLimiter,
-  validate(authValidation.registerSchema),
-  authController.register,
-);
+// router.post(
+//   '/register',
+//   authLimiter,
+//   validate(authValidation.registerSchema),
+//   authController.register,
+// );
 router.post('/login', authLimiter, validate(authValidation.loginSchema), authController.login);
 router.post(
   '/clerk',

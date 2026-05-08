@@ -49,7 +49,8 @@ export const resetPassword = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const getMe = catchAsync(async (req: AuthRequest, res: Response) => {
-  const user = await authService.getProfile(req.user!.userId);
+  console.log('req.user!.userId', req.user!.id);
+  const user = await authService.getProfile(req.user!.id);
   res.status(httpStatus.OK).json({
     status: 'success',
     data: { user },

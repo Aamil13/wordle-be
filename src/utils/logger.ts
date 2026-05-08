@@ -1,12 +1,15 @@
 import winston from 'winston';
 import { config } from '../config/env';
 
+const devFormat = winston.format.printf(({ level, message, stack, timestamp }) => {
+  return `${timestamp} [${level}]: ${stack || message}`;
+});
 export const logger = winston.createLogger({
   level: config.nodeEnv === 'production' ? 'warn' : 'debug',
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    config.nodeEnv === 'production' ? winston.format.json() : winston.format.prettyPrint(),
+    config.nodeEnv === 'production' ? winston.format.json() : devFormat,
   ),
   transports: [
     new winston.transports.Console(),
