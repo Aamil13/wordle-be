@@ -31,6 +31,18 @@ router.post(
   validate(authValidation.resetPasswordSchema),
   authController.resetPassword,
 );
+router.post(
+  '/is-user-name-taken',
+  authLimiter,
+  validate(authValidation.isUserNameTakenSchema),
+  authController.isUserNameTaken,
+);
+router.post(
+  '/is-user-email-taken',
+  authLimiter,
+  validate(authValidation.isUserEmailTakenSchema),
+  authController.isEmailTaken,
+);
 router.get('/me', authenticate, authController.getMe);
 
 export default router;

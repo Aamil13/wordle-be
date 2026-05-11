@@ -15,7 +15,6 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
   }
   try {
     const decoded = jwt.verify(token, config.jwt.secret) as { id: string; email: string };
-    console.log('decoded', decoded);
     req.user = decoded;
     next();
   } catch {

@@ -19,28 +19,28 @@ const getTransporter = async (): Promise<Transporter> => {
     //   },
     // });
     // commenting this
-    // transporter = nodemailer.createTransport({
-    //   host: 'smtp.ethereal.email',
-    //   port: 587,
-    //   auth: {
-    //     user: config.email.user,
-    //     pass: config.email.pass,
-    //   },
-    // });
+    transporter = nodemailer.createTransport({
+      host: 'smtp.ethereal.email',
+      port: 587,
+      auth: {
+        user: config.email.testEmail,
+        pass: config.email.testPass,
+      },
+    });
     // console.log('Ethereal credentials →', {
     //   user: testAccount.user,
     //   pass: testAccount.pass, // add this
     // });
     //
-    transporter = nodemailer.createTransport({
-      host: config.email.host,
-      port: config.email.port,
-      secure: config.email.port === 465,
-      auth: {
-        user: config.email.user,
-        pass: config.email.pass,
-      },
-    });
+    // transporter = nodemailer.createTransport({
+    //   host: config.email.host,
+    //   port: config.email.port,
+    //   secure: config.email.port === 465,
+    //   auth: {
+    //     user: config.email.user,
+    //     pass: config.email.pass,
+    //   },
+    // });
   } else {
     transporter = nodemailer.createTransport({
       host: config.email.host,

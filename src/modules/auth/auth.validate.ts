@@ -42,11 +42,13 @@ export const clerkAuthSchema = Joi.object({
 
 export const forgotPasswordSchema = Joi.object({ email });
 
+export const isUserNameTakenSchema = Joi.object({ userName });
+export const isUserEmailTakenSchema = Joi.object({ email });
 export const resetPasswordSchema = Joi.object({
   token: Joi.string().required(),
   newPassword: password,
   confirmPassword: Joi.any()
     .equal(Joi.ref('newPassword'))
     .required()
-    .messages({ 'any.only': 'Passwords do not match' }),
+    .messages({ 'string.token': 'Token required', 'any.only': 'Passwords do not match' }),
 });
