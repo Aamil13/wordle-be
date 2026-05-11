@@ -32,26 +32,45 @@ export const clerkAuth = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const forgotPassword = catchAsync(async (req: Request, res: Response) => {
-  const result = await authService.forgotPassword(req.body);
+  const result: any = await authService.forgotPassword(req.body);
   res.status(httpStatus.OK).json({
     status: 'success',
     message: result.message,
+    data: result.data,
   });
 });
 
 export const resetPassword = catchAsync(async (req: Request, res: Response) => {
-  const result = await authService.resetPassword(req.body);
+  await authService.resetPassword(req.body);
   res.status(httpStatus.OK).json({
     status: 'success',
     message: 'Password reset successfully',
-    data: result,
+    // data: result,
   });
 });
 
 export const getMe = catchAsync(async (req: AuthRequest, res: Response) => {
-  const user = await authService.getProfile(req.user!.userId);
+  const user = await authService.getProfile(req.user!.id);
   res.status(httpStatus.OK).json({
     status: 'success',
     data: { user },
+  });
+});
+
+export const isUserNameTaken = catchAsync(async (req: AuthRequest, res: Response) => {
+  const user = await authService.getIsUserNameTaken(req.body.userName);
+
+  res.status(httpStatus.OK).json({
+    status: 'success',
+    data: { isUserNameTaken: !!user, message: user ? 'User name already taken' : '' },
+  });
+});
+
+export const isEmailTaken = catchAsync(async (req: AuthRequest, res: Response) => {
+  const user = await authService.getIsEmailTaken(req.body.email);
+
+  res.status(httpStatus.OK).json({
+    status: 'success',
+    data: { isEmailTaken: !!user, message: user ? 'User email already taken' : '' },
   });
 });

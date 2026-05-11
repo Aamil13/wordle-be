@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import authRoute from './auth.route';
+import otpRoute from './otp.route';
 
 const router = Router();
 
@@ -12,6 +13,10 @@ const defaultIRoute: IRoute[] = [
   {
     path: '/auth',
     route: authRoute,
+  },
+  {
+    path: '/otp',
+    route: otpRoute,
   },
 ];
 

@@ -6,12 +6,12 @@ import { authLimiter } from '../../middlewares/rateLimiter.middleware';
 
 const router = Router();
 
-router.post(
-  '/register',
-  authLimiter,
-  validate(authValidation.registerSchema),
-  authController.register,
-);
+// router.post(
+//   '/register',
+//   authLimiter,
+//   validate(authValidation.registerSchema),
+//   authController.register,
+// );
 router.post('/login', authLimiter, validate(authValidation.loginSchema), authController.login);
 router.post(
   '/clerk',
@@ -30,6 +30,18 @@ router.post(
   authLimiter,
   validate(authValidation.resetPasswordSchema),
   authController.resetPassword,
+);
+router.post(
+  '/is-user-name-taken',
+  authLimiter,
+  validate(authValidation.isUserNameTakenSchema),
+  authController.isUserNameTaken,
+);
+router.post(
+  '/is-user-email-taken',
+  authLimiter,
+  validate(authValidation.isUserEmailTakenSchema),
+  authController.isEmailTaken,
 );
 router.get('/me', authenticate, authController.getMe);
 

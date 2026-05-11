@@ -114,9 +114,9 @@ export const forgotPassword = async (input: IForgotPasswordInput) => {
   await user.save({ validateBeforeSave: false });
 
   // Send raw token to user's email — we only store the hash
-  await sendPasswordResetEmail(user.email, user.userName, rawToken);
+  // await sendPasswordResetEmail(user.email, user.userName, rawToken);
 
-  return { message: 'If that email exists, a reset link has been sent' };
+  return { data: rawToken, message: 'Enter your new password.' };
 };
 
 export const resetPassword = async (input: IResetPasswordInput) => {
@@ -140,7 +140,15 @@ export const resetPassword = async (input: IResetPasswordInput) => {
 };
 
 export const getProfile = async (userId: string) => {
-  const user = await UserModel.findById(userId);
+  const user = await UserModel.findById(userId).lean();
   if (!user) throw new AppError('User not found', httpStatus.NOT_FOUND);
   return formatUser(user);
+};
+
+export const getIsUserNameTaken = async (userName: string) => {
+  return await UserModel.exists({ userName });
+};
+
+export const getIsEmailTaken = async (email: string) => {
+  return await UserModel.exists({ email });
 };
