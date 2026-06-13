@@ -1,11 +1,14 @@
 import { Document } from 'mongoose';
 
 export interface IWordles extends Document {
-  // define your fields here
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface IWordlesInput {
-  // define create/update input fields here
+  word: string;
+  hint: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  category: string;
+  timesPlayed: number;
+  successRate: number;
+  averageAttempts: number;
+  isActive: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

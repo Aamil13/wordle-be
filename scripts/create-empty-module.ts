@@ -54,9 +54,11 @@ export {
 
 // CLI args
 const [, , type, name] = process.argv;
-
+console.log({ type, name });
 if (type === 'module') {
   createModule(name);
 } else {
   console.log('Usage: npm run generate module <name>');
 }
+
+// npm run generate-empty-module -- module users
