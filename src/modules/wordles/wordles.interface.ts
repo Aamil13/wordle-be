@@ -8,6 +8,7 @@ export interface IWordles extends Document {
   timesPlayed: number;
   successRate: number;
   averageAttempts: number;
+  attempts: number;
   isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;

@@ -8,6 +8,7 @@ export const validate = (schema: Schema) => {
       return next(new AppError('Request body is missing', 400));
     }
 
+
     const { error, value } = schema.validate(req.body, {
       abortEarly: false,
       stripUnknown: true,

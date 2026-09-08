@@ -108,9 +108,21 @@ export const incrementPlayed = catchAsync(async (req: Request, res: Response) =>
 
 export const getRandomWord = catchAsync(async (req: Request, res: Response) => {
   const result = await wordlesService.getRandomWord();
+   wordlesService.incrementPlayed(result._id as string);
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: result,
+  });
+});
+
+export const updateStats = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const result = await wordlesService.updateStats(id as string, req.body);
 
   res.status(httpStatus.OK).json({
     success: true,
+    message: 'Statistics updated successfully',
     data: result,
   });
 });

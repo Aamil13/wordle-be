@@ -95,3 +95,44 @@ export const getRandomWord = async () => {
 
   return result[0];
 };
+
+export const updateStats = async (id: string, payload: { won: boolean }) => {
+  const word = await WordlesModel.findById(id);
+
+  if (!word) {
+    throw new Error('Word not found');
+  }
+
+  // Get attempts from the word document
+  const attempts = word.attempts;
+
+  // Increment timesPlayed
+  word.timesPlayed += 1;
+
+  // Calculate current wins from successRate
+  const currentWins = (word.successRate * word.timesPlayed) / 100;
+
+  // Calculate current total attempts from averageAttempts
+  const currentTotalAttempts = word.averageAttempts * word.timesPlayed;
+
+  if (payload.won) {
+    // Increment wins
+    const newWins = currentWins + 1;
+    // Calculate new successRate
+    word.successRate = (newWins / word.timesPlayed) * 100;
+  } else {
+    // Recalculate successRate with same wins but increased plays
+    word.successRate = (currentWins / word.timesPlayed) * 100;
+  }
+
+  // Calculate new averageAttempts
+  const newTotalAttempts = currentTotalAttempts + attempts;
+  word.averageAttempts = newTotalAttempts / word.timesPlayed;
+
+  // Reset attempts for next game
+  word.attempts = 0;
+
+  await word.save();
+
+  return word;
+};

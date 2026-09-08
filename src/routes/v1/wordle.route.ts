@@ -54,8 +54,16 @@ router.patch(
 router.patch(
   '/played/:id',
   authenticate,
-  validate(wordlesValidation.mongoIdValidation),
+  // validate(wordlesValidation.mongoIdValidation),
   wordlesController.incrementPlayed,
+);
+
+router.patch(
+  '/stats/:id',
+  authenticate,
+  validate(wordlesValidation.mongoIdValidation),
+  validate(wordlesValidation.updateStatsValidation),
+  wordlesController.updateStats,
 );
 
 router.delete(

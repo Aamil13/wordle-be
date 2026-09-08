@@ -54,12 +54,18 @@ export const updateWordValidation = Joi.object({
 /**
  * Mongo id validation
  */
-export const mongoIdValidation = Joi.object({
-  id: Joi.string().hex().length(24).required().messages({
-    'string.hex': 'Invalid MongoDB id',
-    'string.length': 'Invalid MongoDB id length',
-  }),
-});
+ export const mongoIdValidation = Joi.object({
+   id: Joi.string()
+     .hex()
+     .length(24)
+     .required()
+     .messages({
+       'any.required': 'MongoDB id is required',
+       'string.base': 'MongoDB id must be a string',
+       'string.hex': 'Invalid MongoDB id',
+       'string.length': 'Invalid MongoDB id length',
+     }),
+ });
 
 /**
  * Difficulty param validation
@@ -76,5 +82,15 @@ export const difficultyValidation = Joi.object({
 export const categoryValidation = Joi.object({
   category: Joi.string().required().messages({
     'string.empty': 'Category is required',
+  }),
+});
+
+/**
+ * Update stats validation
+ */
+export const updateStatsValidation = Joi.object({
+  won: Joi.boolean().required().messages({
+    'boolean.base': 'Won must be a boolean',
+    'any.required': 'Won is required',
   }),
 });

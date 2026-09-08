@@ -42,6 +42,11 @@ const WordlesSchema = new Schema<IWordles>(
       default: 0,
       min: 0,
     },
+    attempts: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     isActive: {
       type: Boolean,
       default: true,
