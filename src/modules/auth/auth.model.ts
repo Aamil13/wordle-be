@@ -67,7 +67,6 @@ const UserSchema = new Schema<IUser>(
       },
       [GameMode.INFINITE]: {
         ...gameModeStatsSchema,
-        longestSession: { type: Number, default: 0 },
       },
     },
 

@@ -107,7 +107,7 @@ const initializeStats = (user: any) => {
  */
 export const updateStats = async (params: UpdateStatsParams) => {
   const { userId, gameMode, result } = params;
-
+console.log("result.guesses >= 1",result?.guesses )
   const user = await UserModel.findById(userId);
 
   if (!user) {
@@ -148,6 +148,8 @@ export const updateStats = async (params: UpdateStatsParams) => {
 
       stats.guessDistribution[guess] += 1;
     }
+
+
 
     /**
      * Time attack stats
@@ -191,7 +193,7 @@ export const updateStats = async (params: UpdateStatsParams) => {
 /**
  * Update infinite mode longest session
  */
-export const updateInfiniteSession = async (userId: string, sessionLength: number) => {
+export const updateInfiniteSession = async (userId: string, correctGuesses: number) => {
   const user = await UserModel.findById(userId);
 
   if (!user) {
@@ -206,15 +208,17 @@ export const updateInfiniteSession = async (userId: string, sessionLength: numbe
 
   const infiniteStats = user.stats[GameMode.INFINITE] as IInfiniteStats;
 
-  if (sessionLength > infiniteStats.longestSession) {
-    infiniteStats.longestSession = sessionLength;
+  if (correctGuesses > infiniteStats.maxStreak) {
+    infiniteStats.maxStreak = correctGuesses;
 
-    await user.save();
+
   }
-
+  infiniteStats.currentStreak = correctGuesses
+  infiniteStats.gamesPlayed = 1 + infiniteStats.gamesPlayed
+   await user.save();
   return {
     success: true,
-    longestSession: infiniteStats.longestSession,
+    maxStreak: infiniteStats.maxStreak,
   };
 };
 

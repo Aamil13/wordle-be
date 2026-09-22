@@ -26,7 +26,7 @@ router.get(
 router.get(
   '/:gameMode',
   authenticate,
-  validate(statsValidation.gameModeParamValidation),
+  // validate(statsValidation.gameModeParamValidation),
   statsController.getStatsByMode,
 );
 router.delete(
