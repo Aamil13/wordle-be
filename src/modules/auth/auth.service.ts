@@ -37,16 +37,32 @@ const formatUser = (user: any): IUserResponse => ({
 // --- Services ---
 
 export const register = async (input: IRegisterInput) => {
-  const existingEmail = await UserModel.findOne({ email: input.email.toLowerCase() });
-  if (existingEmail) throw new AppError('Email already in use', httpStatus.CONFLICT);
+  const email = input.email.toLowerCase();
+  const userName = input.userName.toLowerCase();
 
-  const existingUserName = await UserModel.findOne({ userName: input.userName.toLowerCase() });
-  if (existingUserName) throw new AppError('Username already taken', httpStatus.CONFLICT);
+  const existingEmail = await UserModel.findOne({ email });
+  if (existingEmail) {
+    throw new AppError('Email already in use', httpStatus.CONFLICT);
+  }
 
-  const user = await UserModel.create({ ...input, provider: AuthProvider.LOCAL });
+  const existingUserName = await UserModel.findOne({ userName });
+  if (existingUserName) {
+    throw new AppError('Username already taken', httpStatus.CONFLICT);
+  }
+
+  const user = await UserModel.create({
+    ...input,
+    email,
+    userName,
+    provider: AuthProvider.LOCAL,
+  });
+
   const token = signToken(user._id.toString(), user.email);
 
-  return { token, user: formatUser(user) };
+  return {
+    token,
+    user: formatUser(user),
+  };
 };
 
 export const login = async (input: ILoginInput) => {

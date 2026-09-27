@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import authRoute from './auth.route';
 import otpRoute from './otp.route';
+import statsRoute from './stats.route';
+import wordleRoute from './wordle.route';
 
 const router = Router();
 
@@ -17,6 +19,14 @@ const defaultIRoute: IRoute[] = [
   {
     path: '/otp',
     route: otpRoute,
+  },
+  {
+    path: '/stats',
+    route: statsRoute,
+  },
+  {
+    path: '/wordle',
+    route: wordleRoute,
   },
 ];
 

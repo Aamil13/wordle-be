@@ -40,8 +40,8 @@ export interface IUser extends Document {
   stats: {
     [GameMode.DAILY]: IGameModeStats;
     [GameMode.TIME_ATTACK]: IGameModeStats & {
-      bestTime?: number; // fastest win in seconds
-      avgTime?: number; // average solve time
+      bestTime?: number | null; // fastest win in seconds
+      avgTime?: number | null; // average solve time
     };
     [GameMode.INFINITE]: IGameModeStats & {
       longestSession?: number; // most words solved in one session
