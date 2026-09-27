@@ -8,7 +8,6 @@ import { statsService } from '.';
 export const updateStats = catchAsync(async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const { gameMode, result } = req.body;
-
   const updatedStats = await statsService.updateStats({
     userId,
     gameMode,
@@ -23,9 +22,9 @@ export const updateStats = catchAsync(async (req: AuthRequest, res: Response) =>
 
 export const updateInfiniteSession = catchAsync(async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
-  const { sessionLength } = req.body;
+  const { correctGuesses } = req.body;
 
-  const result = await statsService.updateInfiniteSession(userId, sessionLength);
+  const result = await statsService.updateInfiniteSession(userId, correctGuesses);
 
   res.status(httpStatus.OK).json({
     success: true,

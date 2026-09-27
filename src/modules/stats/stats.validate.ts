@@ -33,9 +33,9 @@ export const updateStatsValidation = Joi.object({
 });
 
 export const infiniteSessionValidation = Joi.object({
-  sessionLength: Joi.number().positive().required().messages({
-    'number.base': 'Session length must be a number',
-    'number.positive': 'Session length must be greater than 0',
+  correctGuesses: Joi.number().positive().required().messages({
+    'number.base': 'correctGuesses length must be a number',
+    'number.positive': 'correctGuesses length must be greater than 0',
   }),
 });
 
