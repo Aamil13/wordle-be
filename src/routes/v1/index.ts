@@ -3,6 +3,7 @@ import authRoute from './auth.route';
 import otpRoute from './otp.route';
 import statsRoute from './stats.route';
 import wordleRoute from './wordle.route';
+import dailyRoute from './daily.route';
 
 const router = Router();
 
@@ -27,6 +28,10 @@ const defaultIRoute: IRoute[] = [
   {
     path: '/wordle',
     route: wordleRoute,
+  },
+  {
+    path: '/daily',
+    route: dailyRoute,
   },
 ];
 

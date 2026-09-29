@@ -32,6 +32,7 @@ const formatUser = (user: any): IUserResponse => ({
   provider: user.provider,
   stats: user.stats,
   lastLoginAt: user.lastLoginAt,
+  dailyPlayedToday: user.dailyPlayedToday,
 });
 
 // --- Services ---

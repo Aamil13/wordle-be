@@ -1,5 +1,6 @@
 import express from 'express';
 import { wordlesController, wordlesValidation } from '../../modules/wordles';
+import { dailyController } from '../../modules/daily';
 import { authenticate } from '../../middlewares/auth.middleware';
 import { validate } from '../../middlewares/validate.middleware';
 
@@ -11,6 +12,8 @@ const router = express.Router();
 router.get('/', wordlesController.getAllWords);
 
 router.get('/random', wordlesController.getRandomWord);
+
+router.get('/daily', dailyController.getDailyWord);
 
 router.get(
   '/difficulty/:difficulty',

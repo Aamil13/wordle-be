@@ -3,6 +3,7 @@ import { GameMode } from '../auth/auth.interface';
 import { UserModel } from '../auth/auth.model';
 import { UpdateStatsParams } from './stats.interface';
 import { AppError } from '../../middlewares/error.middleware';
+import * as dailyService from '../daily/daily.service';
 
 /**
  * Guess distribution type
@@ -107,11 +108,27 @@ const initializeStats = (user: any) => {
  */
 export const updateStats = async (params: UpdateStatsParams) => {
   const { userId, gameMode, result } = params;
-console.log("result.guesses >= 1",result?.guesses )
+
   const user = await UserModel.findById(userId);
 
   if (!user) {
     throw new AppError('User not found', httpStatus.NOT_FOUND);
+  }
+
+  /**
+   * Daily mode guard — block duplicate plays and mark as played
+   */
+  if (gameMode === GameMode.DAILY) {
+    const alreadyPlayed = await dailyService.hasDailyPlayedToday(userId);
+
+    if (alreadyPlayed) {
+      throw new AppError(
+        'You have already played daily mode today. Come back tomorrow!',
+        httpStatus.CONFLICT,
+      );
+    }
+
+    await dailyService.markDailyPlayed(userId);
   }
 
   initializeStats(user);

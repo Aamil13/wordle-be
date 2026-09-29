@@ -74,6 +74,7 @@ const UserSchema = new Schema<IUser>(
     passwordResetToken: { type: String, select: false },
     passwordResetExpiresAt: { type: Date, select: false },
 
+    dailyPlayedToday: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
     lastLoginAt: { type: Date, default: Date.now },
   },

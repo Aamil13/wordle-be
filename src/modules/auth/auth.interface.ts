@@ -52,6 +52,7 @@ export interface IUser extends Document {
   passwordResetToken?: string;
   passwordResetExpiresAt?: Date;
 
+  dailyPlayedToday: boolean;
   isActive: boolean;
   lastLoginAt: Date;
   createdAt: Date;
@@ -96,4 +97,5 @@ export interface IUserResponse {
   provider: AuthProvider;
   stats: IUser['stats'];
   lastLoginAt: Date;
+  dailyPlayedToday: boolean;
 }
