@@ -30,4 +30,11 @@ router.post(
   dailyController.createDailyWord,
 );
 
+/**
+ * POST /daily/reset
+ * Manually resets dailyPlayedToday to false for ALL users.
+ * Request body: { key: string }
+ */
+router.post('/reset', dailyController.resetDailyPlayed);
+
 export default router;
