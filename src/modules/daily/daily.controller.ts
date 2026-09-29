@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import { AuthRequest } from '../../middlewares/auth.middleware';
 import { dailyService } from '.';
+import { config } from '../../config/env';
 
 /**
  * GET /daily
@@ -74,5 +75,29 @@ export const createDailyWord = catchAsync(async (req: AuthRequest, res: Response
   res.status(httpStatus.CREATED).json({
     success: true,
     data: dailyWord,
+  });
+});
+
+/**
+ * POST /daily/reset
+ * Manually resets dailyPlayedToday to false for ALL users.
+ * Requires DAILY_RESET_KEY in request body for security.
+ */
+export const resetDailyPlayed = catchAsync(async (req: AuthRequest, res: Response) => {
+  const { key } = req.body;
+
+  if (!key || key !== config.dailyResetKey) {
+    res.status(httpStatus.UNAUTHORIZED).json({
+      success: false,
+      message: 'Invalid or missing reset key',
+    });
+    return;
+  }
+
+  await dailyService.resetAllDailyPlayed();
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    message: 'Daily reset complete — dailyPlayedToday set to false for all users',
   });
 });
