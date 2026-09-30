@@ -85,7 +85,11 @@ export const createDailyWord = catchAsync(async (req: AuthRequest, res: Response
  */
 export const resetDailyPlayed = catchAsync(async (req: AuthRequest, res: Response) => {
   const { key } = req.body;
-
+console.log({
+  receivedKey: !!req.body?.key,
+  configuredKey: !!process.env.DAILY_RESET_KEY,
+  matches: req.body?.key === process.env.DAILY_RESET_KEY,
+});
   if (!key || key !== config.dailyResetKey) {
     res.status(httpStatus.UNAUTHORIZED).json({
       success: false,
