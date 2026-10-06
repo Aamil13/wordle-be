@@ -52,6 +52,7 @@ export interface IUser extends Document {
   passwordResetToken?: string;
   passwordResetExpiresAt?: Date;
 
+  termsAcceptedAt?: Date;
   dailyPlayedToday: boolean;
   isActive: boolean;
   lastLoginAt: Date;
@@ -64,6 +65,7 @@ export interface IRegisterInput {
   email: string;
   password: string;
   displayName?: string;
+  termsAccepted: true;
 }
 
 export interface ILoginInput {

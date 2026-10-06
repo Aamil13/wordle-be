@@ -56,6 +56,7 @@ export const register = async (input: IRegisterInput) => {
     email,
     userName,
     provider: AuthProvider.LOCAL,
+    termsAcceptedAt: new Date(),
   });
 
   const token = signToken(user._id.toString(), user.email);

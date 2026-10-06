@@ -25,6 +25,10 @@ export const registerSchema = Joi.object({
   email,
   password,
   displayName: Joi.string().max(50).optional(),
+  termsAccepted: Joi.boolean().valid(true).required().messages({
+    'any.only': 'You must accept the terms and conditions',
+    'any.required': 'You must accept the terms and conditions',
+  }),
 });
 
 export const loginSchema = Joi.object({
