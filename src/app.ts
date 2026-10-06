@@ -7,6 +7,7 @@ import { errorHandler } from './middlewares/error.middleware';
 import routes from './routes/v1';
 import hpp from 'hpp';
 import { globalLimiter } from './middlewares/rateLimiter.middleware';
+import { appVersionMiddleware } from './middlewares/appVersion.middlewate';
 
 const app = express();
 
