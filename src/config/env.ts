@@ -12,13 +12,9 @@ export const config = {
   },
 
   email: {
-    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-    port: parseInt(process.env.EMAIL_PORT || '587', 10),
-    user: process.env.EMAIL_USER || '',
-    pass: process.env.EMAIL_PASS || '',
-    gmail: process.env.GEMAIL_USER || '',
-    testEmail: process.env.EMAIL_USER_TEST || '',
-    testPass: process.env.EMAIL_PASS_TEST,
+    brevoApiKey: process.env.BREVO_API_KEY || '',
+    fromAddress: process.env.EMAIL_FROM_ADDRESS || '',
+    fromName: process.env.EMAIL_FROM_NAME || 'Wordle App',
   },
 
   clientUrl: process.env.CLIENT_URL || 'http://localhost:8081',
