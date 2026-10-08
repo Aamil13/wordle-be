@@ -3,62 +3,23 @@ import { config } from '../config/env';
 
 // --- Transporter ---
 
-let transporter: Transporter;
+let transporter: Transporter | null = null;
 
-const getTransporter = async (): Promise<Transporter> => {
-  if (transporter) return transporter; // return existing if already initialized
+const getTransporter = (): Transporter => {
+  if (transporter) return transporter;
 
-  if (config.nodeEnv === 'development') {
-    // const testAccount = await nodemailer.createTestAccount();
-    // transporter = nodemailer.createTransport({
-    //   host: 'smtp.ethereal.email',
-    //   port: 587,
-    //   auth: {
-    //     user: testAccount.user,
-    //     pass: testAccount.pass,
-    //   },
-    // });
-    // commenting this
-    // transporter = nodemailer.createTransport({
-    //   host: 'smtp.ethereal.email',
-    //   port: 587,
-    //   auth: {
-    //     user: config.email.testEmail,
-    //     pass: config.email.testPass,
-    //   },
-    // });
-    // console.log('Ethereal credentials →', {
-    //   user: testAccount.user,
-    //   pass: testAccount.pass, // add this
-    // });
-    //
-    transporter = nodemailer.createTransport({
-      host: config.email.host,
-      port: config.email.port,
-      secure: config.email.port === 465,
-      auth: {
-        user: config.email.user,
-        pass: config.email.pass,
-      },
-    });
-  } else {
-    transporter = nodemailer.createTransport({
-      host: config.email.host,
-      port: config.email.port,
-      secure: config.email.port === 465,
-      auth: {
-        user: config.email.user,
-        pass: config.email.pass,
-      },
-    });
-  }
-
-  transporter.verify((error) => {
-    if (error) {
-      console.error('Email transporter error:', error);
-    } else {
-      console.log('Email transporter ready');
-    }
+  transporter = nodemailer.createTransport({
+    host: config.email.host,
+    port: config.email.port,
+    secure: config.email.port === 465,
+    auth: {
+      user: config.email.user,
+      pass: config.email.pass,
+    },
+    // Fail fast rather than hanging the request for the full default timeout
+    connectionTimeout: 10000, // 10s
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
   });
 
   return transporter;
@@ -81,7 +42,7 @@ const baseTemplate = (content: string) => `
 // --- Email senders ---
 
 export const sendOtpEmail = async (to: string, userName: string, otp: string): Promise<void> => {
-  const mail = await getTransporter();
+  const mail = getTransporter();
   await mail.sendMail({
     from: `"Wordle App" <${config.email.gmail}>`,
     to,
@@ -111,7 +72,7 @@ export const sendPasswordResetEmail = async (
   userName: string,
   token: string,
 ): Promise<void> => {
-  const mail = await getTransporter();
+  const mail = getTransporter();
   const resetUrl = `${config.clientUrl}/reset-password?token=${token}`;
 
   await mail.sendMail({
