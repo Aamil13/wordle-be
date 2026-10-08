@@ -32,7 +32,7 @@ export async function evaluateVersion(params: {
   const policy = await getPolicy(params.platform);
   const upgradeRequiredStatus = (httpStatus as any).UPGRADE_REQUIRED ?? 426;
   const jwtExpiredMessage = 'jwt expired';
-console.log("policy",policy)
+  
   if (!policy || !policy.enabled) {
     return {
       policy:

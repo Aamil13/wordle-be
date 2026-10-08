@@ -34,7 +34,7 @@ export const sendOtp = async (input: IRegisterInput) => {
       otp: hashed,
       expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
     },
-    { upsert: true, new: true },
+    { upsert: true, returnDocument: 'after' },
   );
 
   await sendOtpEmail(input.email, input.userName, raw);
@@ -92,7 +92,7 @@ export const resendOtp = async (email: string, userName: string) => {
       otp: hashed,
       expiresAt: new Date(Date.now() + 10 * 60 * 1000),
     },
-    { upsert: true, new: true },
+    { upsert: true, returnDocument: 'after' },
   );
 
   await sendOtpEmail(email, userName, raw);
