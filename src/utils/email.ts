@@ -1,28 +1,33 @@
-import nodemailer, { Transporter } from 'nodemailer';
 import { config } from '../config/env';
 
-// --- Transporter ---
+// --- Brevo HTTP API sender ---
 
-let transporter: Transporter | null = null;
+interface BrevoEmailPayload {
+  to: string;
+  subject: string;
+  html: string;
+}
 
-const getTransporter = (): Transporter => {
-  if (transporter) return transporter;
-
-  transporter = nodemailer.createTransport({
-    host: config.email.host,
-    port: config.email.port,
-    secure: config.email.port === 465,
-    auth: {
-      user: config.email.user,
-      pass: config.email.pass,
+const sendViaBrevo = async ({ to, subject, html }: BrevoEmailPayload): Promise<void> => {
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'api-key': config.email.brevoApiKey,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
     },
-    // Fail fast rather than hanging the request for the full default timeout
-    connectionTimeout: 10000, // 10s
-    greetingTimeout: 10000,
-    socketTimeout: 15000,
+    body: JSON.stringify({
+      sender: { name: config.email.fromName, email: config.email.fromAddress },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
   });
 
-  return transporter;
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(`Brevo API error ${response.status}: ${errorBody}`);
+  }
 };
 
 // --- Base template ---
@@ -42,9 +47,7 @@ const baseTemplate = (content: string) => `
 // --- Email senders ---
 
 export const sendOtpEmail = async (to: string, userName: string, otp: string): Promise<void> => {
-  const mail = getTransporter();
-  await mail.sendMail({
-    from: `"Wordle App" <${config.email.gmail}>`,
+  await sendViaBrevo({
     to,
     subject: 'Your verification code',
     html: baseTemplate(`
@@ -72,11 +75,9 @@ export const sendPasswordResetEmail = async (
   userName: string,
   token: string,
 ): Promise<void> => {
-  const mail = getTransporter();
   const resetUrl = `${config.clientUrl}/reset-password?token=${token}`;
 
-  await mail.sendMail({
-    from: `"Wordle App" <${config.email.gmail}>`,
+  await sendViaBrevo({
     to,
     subject: 'Reset your password',
     html: baseTemplate(`
