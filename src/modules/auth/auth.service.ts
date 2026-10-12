@@ -14,7 +14,7 @@ import {
 import { config } from '../../config/env';
 import { AppError } from '../../middlewares/error.middleware';
 import httpStatus from 'http-status';
-import { sendPasswordResetEmail } from '../../utils/email';
+import { sendOtpEmail } from '../../utils/email';
 
 // --- Helpers ---
 
@@ -120,33 +120,33 @@ export const forgotPassword = async (input: IForgotPasswordInput) => {
 
   // Always return success even if email not found — prevents email enumeration attacks
   if (!user || user.provider === AuthProvider.CLERK) {
-    return { message: 'If that email exists, a reset link has been sent' };
+    return { message: 'If that email exists, a reset code has been sent' };
   }
 
-  // Generate a random token and hash it before storing
-  const rawToken = crypto.randomBytes(32).toString('hex');
-  const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+  // Generate a 6-digit OTP and hash it before storing
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const hashedOtp = crypto.createHash('sha256').update(otp).digest('hex');
 
-  user.passwordResetToken = hashedToken;
-  user.passwordResetExpiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+  user.passwordResetToken = hashedOtp;
+  user.passwordResetExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
   await user.save({ validateBeforeSave: false });
 
-  // Send raw token to user's email — we only store the hash
-  // await sendPasswordResetEmail(user.email, user.userName, rawToken);
+  // Send OTP to user's email — we only store the hash
+  await sendOtpEmail(user.email, user.userName, otp);
 
-  return { data: rawToken, message: 'Enter your new password.' };
+  return { message: 'If that email exists, a reset code has been sent' };
 };
 
 export const resetPassword = async (input: IResetPasswordInput) => {
-  // Hash the incoming token and compare with stored hash
-  const hashedToken = crypto.createHash('sha256').update(input.token).digest('hex');
+  // Hash the incoming OTP and compare with stored hash
+  const hashedOtp = crypto.createHash('sha256').update(input.token).digest('hex');
 
   const user = await UserModel.findOne({
-    passwordResetToken: hashedToken,
+    passwordResetToken: hashedOtp,
     passwordResetExpiresAt: { $gt: Date.now() }, // not expired
   }).select('+password');
 
-  if (!user) throw new AppError('Invalid or expired reset token', httpStatus.BAD_REQUEST);
+  if (!user) throw new AppError('Invalid or expired reset code', httpStatus.BAD_REQUEST);
 
   user.password = input.newPassword;
   user.passwordResetToken = undefined;
