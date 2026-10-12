@@ -36,7 +36,6 @@ export const forgotPassword = catchAsync(async (req: Request, res: Response) => 
   res.status(httpStatus.OK).json({
     status: 'success',
     message: result.message,
-    data: result.data,
   });
 });
 
