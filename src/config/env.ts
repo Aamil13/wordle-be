@@ -20,4 +20,7 @@ export const config = {
   clientUrl: process.env.CLIENT_URL || 'http://localhost:8081',
 
   dailyResetKey: process.env.DAILY_RESET_KEY || '',
-};
+  redis:{
+   url: process.env.REDIS_URL || ''
+  }
+  };
