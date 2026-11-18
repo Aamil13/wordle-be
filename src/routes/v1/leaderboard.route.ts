@@ -22,4 +22,6 @@ const validateQuery = (req: Request, _res: Response, next: NextFunction): void =
 
 router.get('/', validateQuery, leaderboardController.getLeaderboard);
 
+router.post('/snapshot', leaderboardController.snapshotLeaderboard);
+
 export default router;

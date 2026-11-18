@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import * as leaderboardService from './leaderboard.service';
 import { LeaderboardMode } from './leaderboard.interface';
+import { config } from '../../config/env';
 
 /**
  * GET /api/v1/leaderboard?mode=daily&limit=50
@@ -33,5 +34,30 @@ export const getLeaderboard = catchAsync(async (req: Request, res: Response) => 
     live: !isHistorical,
     total: data.length,
     leaderboard: data,
+  });
+});
+
+/**
+ * POST /api/v1/leaderboard/snapshot
+ * Snapshots today's Redis leaderboard into MongoDB.
+ * Called by an external cron service (same pattern as /daily/reset).
+ * Requires DAILY_RESET_KEY in body for auth.
+ */
+export const snapshotLeaderboard = catchAsync(async (req: Request, res: Response) => {
+  const { key } = req.body;
+
+  if (!key || key !== config.dailyResetKey) {
+    res.status(httpStatus.UNAUTHORIZED).json({
+      success: false,
+      message: 'Invalid or missing reset key',
+    });
+    return;
+  }
+
+  await leaderboardService.snapshotToMongo();
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    message: 'Leaderboard snapshot saved to MongoDB',
   });
 });
