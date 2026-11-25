@@ -16,7 +16,10 @@ const validateQuery = (req: Request, _res: Response, next: NextFunction): void =
     return next(new AppError('Validation failed', 400, { details }));
   }
 
-  req.query = value;
+  // Express 5 defines req.query as a read-only getter, so mutate its keys instead of reassigning
+  Object.keys(req.query).forEach((key) => delete req.query[key]);
+  Object.assign(req.query, value);
+
   next();
 };
 

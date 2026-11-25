@@ -15,6 +15,7 @@ export const required = catchAsync(async (req: Request, res: Response) => {
   const current = req.header('x-app-version') || req.header('x-version') || (req.query['current'] as string | undefined) || '';
 
   const policy = await appVersionService.getPolicy(platform);
+
   if (!policy || !policy.enabled) {
     res.status(httpStatus.OK).json({
       shouldUpdate: false,

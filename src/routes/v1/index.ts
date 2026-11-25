@@ -5,6 +5,7 @@ import statsRoute from './stats.route';
 import wordleRoute from './wordle.route';
 import dailyRoute from './daily.route';
 import appVersionRoute from './appVersion.route';
+import leaderboard from './leaderboard.route';
 
 const router = Router();
 
@@ -37,6 +38,10 @@ const defaultIRoute: IRoute[] = [
   {
     path: '/app-version',
     route: appVersionRoute,
+  },
+  {
+    path: '/leaderboard',
+    route: leaderboard,
   },
 ];
 

@@ -13,12 +13,13 @@ import { config } from '../../config/env';
  * - date provided → historical snapshot from MongoDB
  */
 export const getLeaderboard = catchAsync(async (req: Request, res: Response) => {
+
   const { mode, limit, date } = req.query as {
     mode: LeaderboardMode;
     limit?: string;
     date?: string;
   };
-
+console.log("mode",mode)
   const parsedLimit = limit ? parseInt(limit, 10) : 50;
 
   const isHistorical = !!date;
